@@ -1,8 +1,6 @@
 fastapi
 uvicorn
-crewai==0.11.2
 tavily-python
 langchain-groq
 python-dotenv
-litellm
-tiktoken==0.7.0
+groq

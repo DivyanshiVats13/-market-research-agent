@@ -1,10 +1,14 @@
 import os
-os.environ["CREWAI_DISABLE_CACHE"] = "true"
+os.environ["CREWAI_DISABLE_PROMPT_CACHING"] = "true"
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from agents.crew import run_research
+from dotenv import load_dotenv
+from tavily import TavilyClient
+from groq import Groq
+
+load_dotenv()
 
 app = FastAPI()
 
@@ -24,5 +28,33 @@ def root():
 
 @app.post("/research")
 def research(request: ResearchRequest):
-    result = run_research(request.topic)
-    return {"report": result}
+    topic = request.topic
+    
+    # Agent 1: Researcher - search the web
+    tavily = TavilyClient(api_key=os.getenv("TAVILY_API_KEY"))
+    search_results = tavily.search(query=topic, max_results=8)
+    
+    context = ""
+    for r in search_results["results"]:
+        context += f"Title: {r['title']}\nURL: {r['url']}\nContent: {r['content']}\n\n"
+    
+    # Agent 2 & 3: Analyst + Reporter - generate report
+    groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+    
+    response = groq_client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=[
+            {
+                "role": "system",
+                "content": "You are an expert market research analyst. Based on web search results, write a detailed, well-structured markdown report. If the user asks for specific tools, papers, or products, list them with names and links. Use bullet points and be specific."
+            },
+            {
+                "role": "user", 
+                "content": f"Topic: {topic}\n\nWeb Search Results:\n{context}\n\nWrite a comprehensive research report about this topic."
+            }
+        ],
+        max_tokens=2000
+    )
+    
+    report = response.choices[0].message.content
+    return {"report": report}
