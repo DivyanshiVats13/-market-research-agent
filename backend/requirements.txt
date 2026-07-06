@@ -5,3 +5,4 @@ tavily-python
 langchain-groq
 python-dotenv
 litellm
+tiktoken==0.7.0
