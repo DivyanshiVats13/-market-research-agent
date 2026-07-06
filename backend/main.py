@@ -50,7 +50,7 @@ def research(request: ResearchRequest):
             },
             {
                 "role": "user", 
-                "content": f"Topic: {topic}\n\nWeb Search Results:\n{context}\n\nWrite a comprehensive research report about this topic."
+                "content": f"Topic: {topic}\n\nWeb Search Results:\n{context}\n\nAnswer the topic/question directly and conversationally, using the search results above."
             }
         ],
         max_tokens=2000
