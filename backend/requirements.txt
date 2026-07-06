@@ -1,12 +1,7 @@
 fastapi
 uvicorn
-langchain
-langgraph
-crewai==0.70.0
-crewai-tools==0.12.0
+crewai==0.11.2
 tavily-python
-langchain-groq==0.1.9
-langchain-core==0.2.43
+langchain-groq
 python-dotenv
 litellm
-pyyaml==6.0.1
