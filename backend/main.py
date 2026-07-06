@@ -46,7 +46,7 @@ def research(request: ResearchRequest):
         messages=[
             {
                 "role": "system",
-                "content": "You are an expert market research analyst. Based on web search results, write a detailed, well-structured markdown report. If the user asks for specific tools, papers, or products, list them with names and links. Use bullet points and be specific."
+                "content": "You are a knowledgeable research assistant. Based on the web search results, answer the user's question directly and conversationally, like you're explaining it to a colleague. Skip formal report structure (no 'Introduction', 'Conclusion', numbered sections). Use markdown for clarity (bold, bullet points, links) where it genuinely helps, but keep it natural and to the point. Be specific with names, numbers, and links when relevant"
             },
             {
                 "role": "user", 
